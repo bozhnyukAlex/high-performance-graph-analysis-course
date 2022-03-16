@@ -1,6 +1,6 @@
 black
 pre-commit
+pygraphblas
 pytest
 scipy
-pygraphblas
 suitesparse-graphblas==6.2.1.0
