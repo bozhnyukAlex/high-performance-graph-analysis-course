@@ -3,4 +3,3 @@ pre-commit
 pygraphblas
 pytest
 scipy
-suitesparse-graphblas==6.2.1.0
