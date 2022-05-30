@@ -4,6 +4,20 @@ from pygraphblas import types, Matrix
 
 
 def triangles_count(adjacency_matrix: Matrix) -> List[int]:
+    """
+    Takes a graph and for each vertex calculates
+    the number of triangles that contain that vertex
+
+    Parameters
+    ----------
+    adjacency_matrix: Matrix
+        Adjacency matrix of graph
+    Returns
+    -------
+    List[int]:
+        List that specifies for each vertex
+        how many triangles it participates in.
+    """
     if not adjacency_matrix.square:
         raise ValueError("Must be a square matrix: adjacency matrix")
 
@@ -12,16 +26,36 @@ def triangles_count(adjacency_matrix: Matrix) -> List[int]:
             f"Wrong type of matrix: Actual: {adjacency_matrix.type}, but Expected: BOOL"
         )
 
-    res = adjacency_matrix
+    prepared_graph = _prepare_graph(adjacency_matrix)
 
-    for _ in range(2):
-        res = adjacency_matrix.mxm(res, cast=types.INT64, accum=types.INT64.PLUS)
+    # Triangle {i,j,k} means we have a two-edged path ik, kj (mxm) and edge ij (mask) itself
+    tr_matrix = prepared_graph.mxm(prepared_graph, cast=types.INT64, mask=prepared_graph)
+    res_tr_counts = []
 
-    res = res.diag().reduce_vector()
-    res /= 2
+    for v in range(adjacency_matrix.nrows):
+        tr_cnt_v = tr_matrix[v].reduce() // 2
+        res_tr_counts.append(tr_cnt_v)
 
-    vertices, triangles = res.to_lists()
-    tr_count = [0] * adjacency_matrix.nrows
-    for i, vertex in enumerate(vertices):
-        tr_count[vertex] = triangles[i]
-    return tr_count
+    return res_tr_counts
+
+
+def _prepare_graph(adjacency_matrix: Matrix) -> Matrix:
+    """
+    Prepare graph: make it undirected, get rid of self-loops
+
+    Parameters
+    ----------
+    adjacency_matrix: Matrix
+        Adjacency matrix of graph
+    Returns
+    -------
+        Adjacency matrix of prepared graph:
+        undirected, without self-loops
+    """
+    transposed_am = adjacency_matrix.transpose()
+    undirected = adjacency_matrix.union(transposed_am)
+
+    for i in range(adjacency_matrix.nrows):
+        undirected[i, i] = False
+
+    return undirected
