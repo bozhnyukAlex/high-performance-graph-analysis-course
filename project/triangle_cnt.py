@@ -29,7 +29,9 @@ def triangles_count(adjacency_matrix: Matrix) -> List[int]:
     prepared_graph = _prepare_graph(adjacency_matrix)
 
     # Triangle {i,j,k} means we have a two-edged path ik, kj (mxm) and edge ij (mask) itself
-    tr_matrix = prepared_graph.mxm(prepared_graph, cast=types.INT64, mask=prepared_graph)
+    tr_matrix = prepared_graph.mxm(
+        prepared_graph, cast=types.INT64, mask=prepared_graph
+    )
     res_tr_counts = []
 
     for v in range(adjacency_matrix.nrows):
