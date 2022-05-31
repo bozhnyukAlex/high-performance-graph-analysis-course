@@ -1,31 +1,31 @@
 import pygraphblas as pgb
 import pytest
 
-from project import sssp, mssp
+from project import single_ssp, multiple_ssp
 
 
 def test_bad_start_vertex_sssp():
     adjacency_matrix = pgb.Matrix.dense(pgb.BOOL, nrows=4, ncols=4)
     with pytest.raises(ValueError):
-        sssp(adjacency_matrix, -1)
+        single_ssp(adjacency_matrix, -1)
 
 
 def test_bad_start_vertex_mssp():
     adjacency_matrix = pgb.Matrix.dense(pgb.BOOL, nrows=2, ncols=2)
     with pytest.raises(ValueError):
-        mssp(adjacency_matrix, [10])
+        multiple_ssp(adjacency_matrix, [10])
 
 
 def test_non_square_single():
     adj_matrix = pgb.Matrix.dense(pgb.BOOL, nrows=4, ncols=5)
     with pytest.raises(ValueError):
-        sssp(adj_matrix, 0)
+        single_ssp(adj_matrix, 0)
 
 
 def test_non_square_multi():
     adjacency_matrix = pgb.Matrix.dense(pgb.BOOL, nrows=7, ncols=8)
     with pytest.raises(ValueError):
-        mssp(adjacency_matrix, [0])
+        multiple_ssp(adjacency_matrix, [0])
 
 
 @pytest.mark.parametrize(
@@ -53,7 +53,7 @@ def test_non_square_multi():
 )
 def test_single_ssp(I, J, V, size, start_vertex, expected_ans):
     adj_matrix = pgb.Matrix.from_lists(I, J, V, nrows=size, ncols=size)
-    assert sssp(adj_matrix, start_vertex) == expected_ans
+    assert single_ssp(adj_matrix, start_vertex) == expected_ans
 
 
 @pytest.mark.parametrize(
@@ -92,4 +92,4 @@ def test_single_ssp(I, J, V, size, start_vertex, expected_ans):
 )
 def test_multi_ssp(size, I, J, V, start_vertices, expected):
     adj_matrix = pgb.Matrix.from_lists(I, J, V, nrows=size, ncols=size)
-    assert mssp(adj_matrix, start_vertices) == expected
+    assert multiple_ssp(adj_matrix, start_vertices) == expected
