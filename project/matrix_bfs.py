@@ -27,7 +27,7 @@ def bfs(adjacency_matrix: Matrix, start_vertex: int) -> List[int]:
 
 
 def multiple_source_bfs(
-        adjacency_matrix: Matrix, start_vertices: List[int]
+    adjacency_matrix: Matrix, start_vertices: List[int]
 ) -> List[Tuple[int, List[int]]]:
     """
     Implementation of LA Multiple Source BFS algorithm for given graph and list of start vertices
@@ -50,7 +50,7 @@ def multiple_source_bfs(
 
 
 def _bfs_helper(
-        adjacency_matrix: Matrix, start_vertices: List[int]
+    adjacency_matrix: Matrix, start_vertices: List[int]
 ) -> List[Tuple[int, List[int]]]:
     """
     Helper function for LA BFS and LA Multiple Source BFS for
