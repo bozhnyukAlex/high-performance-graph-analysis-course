@@ -34,7 +34,7 @@ def single_ssp(adjacency_matrix: gb.Matrix, start_vertex: int) -> List[int]:
 
 
 def multiple_ssp(
-        adjacency_matrix: gb.Matrix, start_vertices: List[int]
+    adjacency_matrix: gb.Matrix, start_vertices: List[int]
 ) -> List[Tuple[int, List[int]]]:
     """
     Solve Multiple SSP problem for given graph and list of start vertices
@@ -75,9 +75,7 @@ def _calculate_ssp(adjacency_matrix: gb.Matrix, start_vertex: int) -> gb.Vector:
     Vector:
         vector with resulted shortest paths
     """
-    current_front = gb.Vector.sparse(
-        adjacency_matrix.type, size=adjacency_matrix.nrows
-    )
+    current_front = gb.Vector.sparse(adjacency_matrix.type, size=adjacency_matrix.nrows)
     current_front[start_vertex] = 0
 
     rounds = 0
